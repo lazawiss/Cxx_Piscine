@@ -1,7 +1,7 @@
 NAME = Braiiiiiiinnnzzz
 
-C++ = c++
-C++FLAGS = -Wextra -Wall -Werror -std=c++98
+CXX = c++
+CXXFLAGS = -Wextra -Wall -Werror -std=c++98 -MMD -MP
 
 SRC = \
 	main.cpp \
@@ -16,10 +16,10 @@ DEPS = $(SRC:.cpp=.d)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(C++) $(C++FLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 %.o: %.cpp
-	$(C++) $(C++FLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 	
 -include $(DEPS)
 

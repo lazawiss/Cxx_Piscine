@@ -7,17 +7,24 @@ SRC = \
 	HumanB.cpp
 
 OBJ = $(SRC:.cpp=.o)
+DEPS = $(SRC:.cpp=.d)
 
-C++ = c++
-C++FLAGS = -Werror -Wextra -Wall -std=c++98
+
+CXX = c++
+CXXFLAGS = -Werror -Wextra -Wall -std=c++98 -MMD -MP
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(C++) $(C++FLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	
+-include $(DEPS)
 
 clean: 
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(DEPS)
 
 fclean: clean
 	rm -f $(NAME)

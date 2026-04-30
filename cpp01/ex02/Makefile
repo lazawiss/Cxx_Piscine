@@ -2,18 +2,25 @@ NAME = HI
 
 SRC = main.cpp
 
-C++ = c++
-C++FLAGS = -Wextra -Werror -Werror -std=c++98
+CXX = c++
+CXXFLAGS = -Wextra -Werror -Werror -std=c++98 -MMD -MP
 
 OBJ = $(SRC:.cpp=.o)
+DEPS = $(SRC:.cpp=.d)
+
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(C++) $(C++FLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	
+-include $(DEPS)
 
 clean: 
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(DEPS)
 
 fclean: clean
 	rm -f $(NAME)

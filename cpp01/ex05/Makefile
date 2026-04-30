@@ -7,16 +7,16 @@ SRC = \
 OBJ = $(SRC:.cpp=.o)
 DEPS = $(SRC:.cpp=.d)
 
-C++ = c++
-C++FLAGS = -Wall -Werror -Wextra -std=c++98 -MMD -MP
+CXX = c++
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD -MP
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(C++) $(C++FLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 %.o: %.cpp
-	$(C++) $(C++FLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 	
 -include $(DEPS)
 
