@@ -6,11 +6,12 @@
 /*   By: lzannis <lzannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 16:11:12 by lzannis           #+#    #+#             */
-/*   Updated: 2026/02/21 13:23:31 by lzannis          ###   ########.fr       */
+/*   Updated: 2026/05/01 16:50:01 by lzannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "HumanA.hpp"
+#include "Weapon.hpp"
 
 HumanA::HumanA( std::string name, Weapon& club ) : _nameA(name),  _WeaponRef(club){
 	

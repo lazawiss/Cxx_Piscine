@@ -6,7 +6,7 @@
 /*   By: lzannis <lzannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 16:16:26 by lzannis           #+#    #+#             */
-/*   Updated: 2026/02/21 14:28:50 by lzannis          ###   ########.fr       */
+/*   Updated: 2026/05/01 16:55:26 by lzannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ class	HumanB {
 	
 private:
 	
-	Weapon*		_WeaponPtr;
 	std::string	_nameB;
+	Weapon*		_WeaponPtr;
 	
 public:
 

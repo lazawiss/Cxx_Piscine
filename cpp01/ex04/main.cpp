@@ -6,7 +6,7 @@
 /*   By: lzannis <lzannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:47:43 by lzannis           #+#    #+#             */
-/*   Updated: 2026/02/24 19:15:36 by lzannis          ###   ########.fr       */
+/*   Updated: 2026/05/01 17:13:55 by lzannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 
 int main( int arc, char *arv[] ){
 	
-	if (arc == 0)
-		return 0;
 	if (arc == 4){
 		
 		std::string	s1(arv[2]);
@@ -62,5 +60,7 @@ int main( int arc, char *arv[] ){
 		}
 		ofs.close();
 	}
+	else
+		std::cout << "arguments: <./program> <file> <string_to_be_replaced> <string_to_replace> " << std::endl;
 	return 0;
 }

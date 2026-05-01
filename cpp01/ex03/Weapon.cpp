@@ -6,7 +6,7 @@
 /*   By: lzannis <lzannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 16:25:31 by lzannis           #+#    #+#             */
-/*   Updated: 2026/02/19 18:10:55 by lzannis          ###   ########.fr       */
+/*   Updated: 2026/05/01 16:57:44 by lzannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 Weapon::Weapon( std::string	type ) : _type(type) {
 
 	std::cout << "Constructor Weapon" << std::endl;
-	return;
 }
 
 Weapon::~Weapon( void ) {
 	
 	std::cout << "Destructor Weapon" << std::endl;
-	return;
 }
 
 std::string	Weapon::getType( void ) const{
