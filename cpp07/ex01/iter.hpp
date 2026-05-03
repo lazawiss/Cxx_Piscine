@@ -6,7 +6,7 @@
 /*   By: lzannis <lzannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 12:35:44 by lzannis           #+#    #+#             */
-/*   Updated: 2026/05/03 17:34:28 by lzannis          ###   ########.fr       */
+/*   Updated: 2026/05/03 17:37:17 by lzannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void    print_array(T const *arr, size_t const length){
 }
 
 template< typename T, typename U >
-void    iter( T const *adress, U const length, void  f(T const & a) ){
+void    iter( T *adress, U const length, void  f(T & a) ){
     
     if (adress && length > 0){
         
