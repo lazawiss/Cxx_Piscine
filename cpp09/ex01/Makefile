@@ -3,23 +3,24 @@ NAME = RPN
 SRC = \
 	main.cpp \
 	RPN.cpp
- 
+
 OBJ = $(SRC:.cpp=.o)
 DEPS = $(SRC:.cpp=.d)
 
 CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD -MP -g3
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
-%.o:%cpp
+%.o:%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
 -include $(DEPS)
 
-clean:
+clean: 
 	rm -f $(OBJ) $(DEPS)
 
 fclean: clean
