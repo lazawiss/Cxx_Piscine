@@ -1,6 +1,6 @@
 # include "RPN.hpp"
 
-RPN::RPN(std::list<char> &input) : _input(input), _carried(0){
+RPN::RPN(std::list<char> &input) : _input(input){
 
 }
 
@@ -42,7 +42,6 @@ int    RPN::parseInput(){
 
     if (isSign(hold) == true){
         throw std::runtime_error("Error: input invalid");
-        sign = true;
     }
     if (sign == false && !isdigit(hold))
         throw std::runtime_error("Error: input invalid");
@@ -52,8 +51,10 @@ int    RPN::parseInput(){
         ss << hold;
         ss >> leftNum;
         if (leftNum >= 10)
-        throw std::runtime_error("Error: argument value is too high.");
+            throw std::runtime_error("Error: argument value is too high.");
         _input.pop_front();
+        if (_input.size() == 0)
+            throw std::runtime_error("Error: not enough value.");
     }
          
     for (size_t i = _input.size(); i > 0 ;i--){
@@ -61,9 +62,8 @@ int    RPN::parseInput(){
         int rightNum = 0;
        
         hold = _input.front();
-        if (isSign(hold) == true){
+        if (carry == false && isSign(hold) == true){
             throw std::runtime_error("Error: input invalid");
-            sign = true;
         }
         if (sign == false && !isdigit(hold)){
             throw std::runtime_error("Error: input invalid");
@@ -74,28 +74,32 @@ int    RPN::parseInput(){
             ss << hold;
             ss >> rightNum;
             if (rightNum >= 10)
-            throw std::runtime_error("Error: argument value is too high.");
+                throw std::runtime_error("Error: argument value is too high.");
             _input.pop_front();
+            if (_input.size() == 0)
+                throw std::runtime_error("Error: not enough value or sign.");
         }
 
         hold = _input.front();
 
         if (isSign(hold) == false && isdigit(hold)){
-            _carried = leftNum;
-            leftNum = rightNum;
-            carry = true;
+        _carried.push_front(leftNum);
+        leftNum = rightNum;
+        carry = true;
             continue;
         }
         else
             result = makeOperations(leftNum, rightNum);
 
-        if (carry == true)
-        {
+        while (carry == true)
+        {        
             _input.pop_front();
-            leftNum = _carried;
+            leftNum = _carried.front();
+            _carried.pop_front();
             rightNum = result;
             result = makeOperations(leftNum, rightNum);
-            carry = false;
+            if (_carried.empty())
+                carry = false;
         } 
         leftNum = result;
 
@@ -109,6 +113,8 @@ int    RPN::parseInput(){
 
 int    RPN::makeOperations( int & leftNum, int & rightNum){
 
+    if (_input.size() == 0)
+            throw std::runtime_error("Error: not enough value or sign.");
     char op = _input.front();
   
     int result = 0;
@@ -138,6 +144,5 @@ int    RPN::makeOperations( int & leftNum, int & rightNum){
             break;
         }
     }
-
     return result;
 }

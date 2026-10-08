@@ -6,7 +6,7 @@
 /*   By: lzannis <lzannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:30:57 by lzannis           #+#    #+#             */
-/*   Updated: 2026/09/15 16:39:44 by lzannis          ###   ########.fr       */
+/*   Updated: 2026/10/02 21:31:46 by lzannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void    BitcoinExchange::parseCsv(){
         throw std::runtime_error("Error: file doesn't exist or wrong file descriptor" );
     }
     if (ifs.peek() == EOF)
-        throw std::runtime_error("Error: file is empty.");
+        throw std::runtime_error("Error: .csv file is empty.");
         
     std::string line;
 
@@ -87,16 +87,18 @@ void    BitcoinExchange::parseCsv(){
         size_t pos = line.find(',');
         if (pos == std::string::npos){
             _dataCsv[line];
-            checkDate(inputDate);
+            checkDateCvs(inputDate);
             continue;
         }
         std::string beforeComma = line.substr(0, pos - 0);
         inputDate = beforeComma;
-        if (checkDate(inputDate) == false){
+        if (checkDateCvs(inputDate) == false){
             throw std::runtime_error("Error: wrong format in database => " + inputDate );
         }
         std::string afterComma = line.substr(pos, lenline - pos);
         afterComma.erase(afterComma.begin());
+        if (afterComma.empty())
+            throw std::runtime_error("Error: no value in database => " + line);
         if (is_digit(afterComma) == false)
             throw std::runtime_error("Error: wrong format in database => " + afterComma);
         std::stringstream ss;
@@ -132,6 +134,8 @@ void    BitcoinExchange::parseCsv(){
 // parse & check date 
 bool   BitcoinExchange::checkDateCvs(std::string &inputDate){
     
+    if (inputDate.size() > 10 || inputDate.size() < 10)
+        return false;
     std::istringstream input2;
     input2.str(inputDate);
     std::string line;
@@ -187,6 +191,10 @@ bool   BitcoinExchange::checkDateCvs(std::string &inputDate){
 // store dates in private variables
 bool   BitcoinExchange::checkDate(std::string &inputDate){
     
+    if (inputDate.size() > 10 || inputDate.size() < 10){
+        std::cerr << "Error: wrong input date => "<< inputDate << std::endl;
+        return false;
+    }
     std::istringstream input2;
     input2.str(inputDate);
     std::string line;
@@ -253,7 +261,7 @@ void   BitcoinExchange::parseInput(){
         throw std::runtime_error("Error: file doesn't exist or wrong file descriptor.");
     }
     if (ifs.peek() == EOF)
-        throw std::runtime_error("Error: file is empty.");
+        throw std::runtime_error("Error: input file is empty.");
 
     std::string line;
     if (getline(ifs, line)){
@@ -282,6 +290,11 @@ void   BitcoinExchange::parseInput(){
             continue;
         std::string afterPipe = line.substr(pos, lenline - pos);
         afterPipe.erase(afterPipe.begin(), afterPipe.begin() + 3);
+        if (afterPipe.empty()){
+            std::cerr << "Error: no value." << afterPipe << std::endl;
+            continue;
+        }
+        
         if (is_digit(afterPipe) == false){
             std::cerr << "Error: value is not a digit => " << afterPipe << std::endl;
             continue;

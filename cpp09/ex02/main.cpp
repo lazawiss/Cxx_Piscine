@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leazannis <leazannis@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lzannis <lzannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 20:28:34 by lzannis           #+#    #+#             */
-/*   Updated: 2026/09/23 00:00:08 by leazannis        ###   ########.fr       */
+/*   Updated: 2026/10/06 21:56:43 by lzannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 std::string & getCin(std::string & data){
  
         getline(std::cin,data);
-        if (data.empty()){
+        if (std::cin.fail()){
             std::cerr << "Error: no arguments." << std::endl;
             exit(EXIT_FAILURE);
         }
@@ -33,19 +33,25 @@ bool processData(std::string & data, std::vector<std::string> & vecstr){
     if (!data.empty()){
         
         for (size_t i = 0; i < data.size(); i++){
-            while(data[i] != ' ' && isdigit(data[i])){
-                i++;
+            if (data[i] == ' '){
+                start = i;
+                continue;
             }
-            size_t end = i;
+            size_t j = i;
+            while(data[j] != ' ' && isdigit(data[j])){
+                j++;
+            }
+            size_t end = j;
             std::string num = data.substr(start, end-start);
+
             if (num.empty()){
                 continue;
             }
             ss << num;
-            int nb = 0;
+            ssize_t nb = 0;
             ss >> nb;
-            if (nb < 0){
-                std::cerr << "Error: integer is negativ." << std::endl;
+            if (nb <= 0){
+                std::cerr << "Error: invalid input." << std::endl;
                 return false;
             }
             if (nb > INT_MAX){
@@ -67,7 +73,7 @@ bool processData(std::string & data, std::vector<std::string> & vecstr){
                 continue;
             }
             ss << num;
-            int nb = 0;
+            ssize_t nb = 0;
             ss >> nb;
             if (nb < 0){
                 std::cerr << "Error: integer is negativ." << std::endl;
@@ -87,35 +93,38 @@ bool processData(std::string & data, std::vector<std::string> & vecstr){
         std::cerr << "Error: Vector is Empty." << std::endl;
         return false;
     }
+    if (vec.size() < 2){
+        std::cerr << "Error: Not enough value to sort." << std::endl;
+        return false;
+    }
     if (deq.empty()){
         std::cerr << "Error: Deque is Empty." << std::endl;
         return false;
     }
-   
-    std::cout << "Before sort vector: " << std::endl;
+    if (deq.size() < 2){
+        std::cerr << "Error: Not enough value to sort." << std::endl;
+        return false;
+    }
+    
+    std::multiset<int> multi1(vec.begin(), vec.end());
+    std::cout << "Before sort: " << std::endl;
     p.printVec(vec,vec.size());
-
-    //std::cout << "Before sort deque: " << std::endl;
-    //p.printDeque(deq,deq.size());
 
     startTimeVec = clock();
-    std::vector<int>::iterator left = vec.begin();
-    std::vector<int>::iterator right = vec.end();
-    p.recursiveMergeSortVec(vec,left, right);
-    
+    p.fordJohnsonVec(vec);
     endTimeVec = clock();
+    std::multiset<int> multi2(vec.begin(), vec.end());
 
     startTimeDeq = clock();
-    
-    p.insertionSortDeque(deq,deq.size());
-    
+    p.fordJohnsonDeq(deq);
     endTimeDeq = clock();
     
-    std::cout << "After sort vector: " << std::endl;
+    std::cout << "After sort: " << std::endl;
     p.printVec(vec,vec.size());
 
-    //std::cout << "After sort deque: " << std::endl;
-    //p.printDeque(deq,deq.size());
+    // std::cout << "After sort deque: " << std::endl;
+    // p.printDeque(deq,deq.size());
+    // std::cout << std::endl;
 
     double timeTakenVec = double(endTimeVec - startTimeVec) / double(CLOCKS_PER_SEC);
     std::cout << "Time to process of a range of " << vec.size();
@@ -128,6 +137,21 @@ bool processData(std::string & data, std::vector<std::string> & vecstr){
     std::cout << std::fixed << timeTakenDeq << std::setprecision(6); 
     std::cout << " sec" << std::endl;
 
+
+    std::cout << std::endl;
+    if (multi1 != multi2)
+        std::cout << "Missing elements or duplicates " << std::endl;
+        
+    p.checkVec(vec);
+    p.checkDeq(deq);
+    std::cout << std::endl;
+    
+    p.worstCaseCalculator(vec);
+
+    std::cout << "Cost for vector: " << p.getCountVec() << std::endl;
+    std::cout << "Cost for deque: " << p.getCountDeq() << std::endl;
+
+
     return true;
 }
 
@@ -138,7 +162,6 @@ int main(int arc, char *arv[]){
     std::ifstream ifs;
     if (arc > 2){
         for (int i = 1; i < arc; i++){
-        std::cout << "arv["<< i << "]" << arv[i] << std::endl;
             vecstr.push_back(arv[i]);
         }
     }
@@ -160,7 +183,9 @@ int main(int arc, char *arv[]){
             data = arv[1];
     }
     else{
-        data = getCin(data);
+        std::cerr << "Error: Nothing to sort." << std::endl;
+        std::cerr << "Enter arguments or file." << std::endl;
+        return 1;
     }
 
     if (processData(data, vecstr) == false)

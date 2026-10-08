@@ -8,7 +8,7 @@ OBJ = $(SRC:.cpp=.o)
 DEPS = $(SRC:.cpp=.d)
 
 CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD -MP -g3
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD -MP 
 
 all: $(NAME)
 
